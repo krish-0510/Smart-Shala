@@ -6,6 +6,10 @@ let classRoomSchema = new mongoose.Schema({
         type : String,
         required : true,
     },
+    admin : {
+        type: mongoose.Schema.Types.ObjectId,
+        required : true,
+    },
     students: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Student',

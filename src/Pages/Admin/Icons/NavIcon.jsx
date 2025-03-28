@@ -6,6 +6,7 @@ import StudentIcon from './SideNavICons/StudentIcon.png'
 import StudentRegistrationImage from './StudentRegiImage/image.png'
 
 
-export {TeacherIcon ,HomeIcon ,DataIcon ,MeetingIcon ,StudentIcon,StudentRegistrationImage
+
+export {TeacherIcon ,HomeIcon ,DataIcon, MeetingIcon ,StudentIcon,StudentRegistrationImage
 
 }  

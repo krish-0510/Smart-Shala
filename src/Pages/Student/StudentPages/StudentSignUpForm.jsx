@@ -1,67 +1,54 @@
 import { useState } from "react";
 import { StudentRegistrationImage } from "../../Admin/Icons/NavIcon.jsx";
-import axios from 'axios'
+import axios from "axios";
 import { Password } from "@mui/icons-material";
 import toast from "react-hot-toast";
-
 
 const StudentForm = () => {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [parentName,setParentName] = useState("");
-  const [parentContact , setParentContact] = useState("");
-  const [password , setPassword] = useState('');
+  const [parentName, setParentName] = useState("");
+  const [parentContact, setParentContact] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  
+  const HandleStudentSubmit = async (e) => {
+    e.preventDefault();
 
+    const studentFormData = {
+      name,
+      email,
+      contact,
+      address,
+      parentName,
+      parentContact,
+      password,
+    };
+    if (!/^\d{10}$/.test(studentFormData.contact)) {
+      toast.error("Phone number must be 10 digits.");
+      return;
+    }
+    if (!/^\d{10}$/.test(studentFormData.parentContact)) {
+      toast.error("Parent number must be 10 digits.");
+      return;
+    }
 
-
-  const HandleStudentSubmit = async(e) => {
- e.preventDefault();
-
-
-
-const studentFormData = {
-  name,
-  email,
-  contact,
-  address,
-  parentName,
-  parentContact,
-  password
-
-
-}
-if (!/^\d{10}$/.test(studentFormData.contact)) {
-  toast.error("Phone number must be 10 digits.")
-  return;
-};
-if (!/^\d{10}$/.test(studentFormData.parentContact)) {
-  toast.error("Parent number must be 10 digits.")
-  return;
-};
-
-
-if ( studentFormData.password.length < 6) {
-  toast.error("Password must be atleast 6 charcater long");
-  return;
-}
-
+    if (studentFormData.password.length < 6) {
+      toast.error("Password must be atleast 6 charcater long");
+      return;
+    }
 
     try {
-    
-
-
-      const responce =  await axios.post('http://localhost:3000/signup/student' , studentFormData);
+      const responce = await axios.post(
+        "http://localhost:3000/signup/student",
+        studentFormData
+      );
 
       console.log(responce.data);
-      
 
-      window.location.href = window.location.origin+"/login";
-      
+      window.location.href = window.location.origin + "/login";
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -133,7 +120,6 @@ if ( studentFormData.password.length < 6) {
                   setEmail(e.target.value);
                 }}
                 value={email}
-                
                 className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
                 id="grid-email"
                 type="email"
@@ -148,7 +134,7 @@ if ( studentFormData.password.length < 6) {
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="grid-phone"
               >
-              Password
+                Password
               </label>
               <input
                 required
@@ -204,7 +190,9 @@ if ( studentFormData.password.length < 6) {
                 type="text"
                 placeholder="Jane"
                 required
-                onChange={(e)=>{setParentName(e.target.value)}}
+                onChange={(e) => {
+                  setParentName(e.target.value);
+                }}
               />
               {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
@@ -221,15 +209,15 @@ if ( studentFormData.password.length < 6) {
                 type="number"
                 placeholder="+91   "
                 required
-                onChange={(e)=>{setParentContact(e.target.value)}}
-
+                onChange={(e) => {
+                  setParentContact(e.target.value);
+                }}
               />
               {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
           </div>
           <button
             type="submit"
-
             className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-green-500 bg-blue-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-gray-500 hover:before:-translate-x-40"
           >
             submit

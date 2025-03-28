@@ -1,7 +1,7 @@
 import React from 'react'
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, List, ListItem, ListItemText } from '@mui/material';
 import { useState } from 'react';
-import { getClassroomName } from '../../../../Backend/Controller/classroom';
+import { getClassroomName } from '../../../../../Backend/Controller/classroom';
 const Studentprofile = ({student}) => {
   
   return (

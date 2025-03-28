@@ -30,9 +30,8 @@ const OnlineMeetSchedule = () => {
           onClick={() => setActiveTab("ongoing")}
           className={`cursor-pointer px-4 py-2 text-lg ${
             activeTab === "ongoing"
-              ? "text-blue-600 border-b-2 border-blue-600"
-              : "text-gray-600"
-          }`}
+              ? "text-sky-800 border-b-2 border-sky-800"
+              : "text-gray-600 "}`}
         >
           Ongoing
         </div>
@@ -40,7 +39,7 @@ const OnlineMeetSchedule = () => {
           onClick={() => setActiveTab("upcoming")}
           className={`cursor-pointer px-4 py-2 text-lg ${
             activeTab === "upcoming"
-              ? "text-blue-600 border-b-2 border-blue-600"
+              ? "text-sky-800 border-b-2 border-sky-800"
               : "text-gray-600"
           }`}
         >
@@ -50,7 +49,7 @@ const OnlineMeetSchedule = () => {
           onClick={() => setActiveTab("last")}
           className={`cursor-pointer px-4 py-2 text-lg ${
             activeTab === "last"
-              ? "text-blue-600 border-b-2 border-blue-600"
+              ? "text-sky-800 border-b-2 border-sky-800"
               : "text-gray-600"
           }`}
         >
@@ -67,12 +66,12 @@ const OnlineMeetSchedule = () => {
           >
             <div>
               <h2 className="text-lg font-semibold">{meeting.subject}</h2>
-              <p className="text-gray-600">{meeting.date}</p>
-              <p className="text-gray-600">{meeting.time}</p>
+              <p className="text-gray-600 text-red-400">{meeting.date}</p>
+              <p className="text-gray-600 text-red-400">{meeting.time}</p>
             </div>
             <button
               onClick={() => window.open(meeting.link, "_blank")}
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+              className="mt-4 bg-sky-800 text-white px-4 py-2 rounded-md hover:bg-sky-800"
             >
               Open Meeting
             </button>

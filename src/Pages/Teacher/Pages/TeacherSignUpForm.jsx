@@ -1,47 +1,44 @@
 import { useState } from "react";
 import { StudentRegistrationImage } from "../../Admin/Icons/NavIcon.jsx";
-import axios from 'axios';
+import axios from "axios";
 import toast from "react-hot-toast";
-
 
 const TeacherForm = () => {
   const [name, setName] = useState("");
   const [contact, setContact] = useState("");
   const [email, setEmail] = useState("");
   const [address, setAddress] = useState("");
-  const [password , setPassword] = useState('');
+  const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const HandleTeacherSubmit = async(e) => {
+  const HandleTeacherSubmit = async (e) => {
     e.preventDefault();
 
-    
-
-  const teacherFormData = {
-    name,
-    email,
-    contact,
-    address,
-    password
-  }
-  if (!/^\d{10}$/.test(teacherFormData.contact)) {
-      toast.error("Phone number must be 10 digits.")
-      return;
+    const teacherFormData = {
+      name,
+      email,
+      contact,
+      address,
+      password,
     };
-    if ( teacherFormData.password.length < 6) {
+    if (!/^\d{10}$/.test(teacherFormData.contact)) {
+      toast.error("Phone number must be 10 digits.");
+      return;
+    }
+    if (teacherFormData.password.length < 6) {
       toast.error("Password must be atleast 6 charcater long");
       return;
     }
 
-   
     try {
-      const responce =  await axios.post('http://localhost:3000/signup/teacher' , teacherFormData);
+      const responce = await axios.post(
+        "http://localhost:3000/signup/teacher",
+        teacherFormData
+      );
 
       console.log(responce.data);
-      
 
-      window.location.href = window.location.origin+"/login";
-      
+      window.location.href = window.location.origin + "/login";
     } catch (error) {
       toast.error(error.response.data.message);
     }
@@ -127,7 +124,7 @@ const TeacherForm = () => {
                 className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                 htmlFor="grid-phone"
               >
-              Password
+                Password
               </label>
               <input
                 required
@@ -142,9 +139,7 @@ const TeacherForm = () => {
               />
               {/* <p className="text-red-500 text-xs italic">Please fill out this field.</p> */}
             </div>
- {/* Password */}
-
-
+            {/* Password */}
           </div>
 
           <div className="flex flex-wrap -mx-3 mb-2">
@@ -173,8 +168,7 @@ const TeacherForm = () => {
           </div>
           <button
             type="submit"
-
-            className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-green-500 bg-blue-500 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-gray-500 hover:before:-translate-x-40"
+            className="before:ease relative h-12 w-40 overflow-hidden border rounded-md border-green-500 bg-sky-800 text-white shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-gray-500 hover:before:-translate-x-40"
           >
             submit
           </button>

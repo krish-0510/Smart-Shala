@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import TeacherLeftSideNavBar from '../Components/TeacherLeftSideNavBar';
-import TeacherProfile from '../Components/TeacherProfile';
+import TeacherProfile from '../Components/ProfilePageComponents/TeacherProfile';
 import axios from 'axios';
 
 const TeacherProfilePage = () => {
@@ -25,14 +25,16 @@ const TeacherProfilePage = () => {
     fetchTeacher();
   }, []);
 
+
   return (
     <div className="flex min-h-screen bg-gray-100">
       <TeacherLeftSideNavBar isExpanded={isExpanded} toggleSidebar={toggleSidebar} />
       <div className="flex-1 p-8">
         <h1 className="text-2xl font-bold text-center mb-8">Teacher Profile</h1>
         {teacher ? (
-          <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-lg">
+          <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-sm">
             <TeacherProfile teacher={teacher} />
+        
           </div>
         ) : (
           <div className="text-center">Loading...</div>

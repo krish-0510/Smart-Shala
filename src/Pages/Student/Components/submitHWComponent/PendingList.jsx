@@ -2,8 +2,10 @@ import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import LeftSideNavbar from "../LeftSideNavBar";
 
-const PendingList = () => {
+const PendingList = () => { 
+  const [isExpanded, setIsExpanded] = useState(false);
   const navigate = useNavigate();
   let [PendingHomeWork, setPendingHomework] = useState([]);
   let [SubmittedHomeWork, setSubmittedHomeWork] = useState([]);
@@ -41,7 +43,12 @@ const PendingList = () => {
   }
 
   return (
-    <>
+    <> 
+      <div
+        className={`flex-1 transition-all duration-300 ml-${
+          isExpanded ? "64" : "16"
+        } p-6 mr-50 overflow-x-auto`}
+      > 
     <div className="p-4 m-5">
       <h1 className="text-2xl font-bold mb-4 border-gray-100 border-b-2 p-2 text-center">
         Pending Homework
@@ -85,6 +92,7 @@ const PendingList = () => {
           </li>
         ))}
       </ul>
+    </div> 
     </div>
     </>
   );

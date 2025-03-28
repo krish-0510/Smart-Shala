@@ -26,22 +26,18 @@ export const addAdmin = async (req, res) => {
 };
 
 //get Admin
-export const getAdmin = async(req, res) => {
+export const getAdmin = async (req, res) => {
   const id = req.params.id;
-    try {
-        const admin = await Admin.findById(id);
-        if(admin == null) {
-            res.status(400).json({message:"Admin does not exist"});
-        }
-        else {
-            res.status(201).json({message:"success", admin});
-        }
-    } catch (err) {
-        //handle error
-        console.log(err);
-        res.status(500).json({message:"internal server error"});
-    }
-}
+  try {
+      const admin = await Admin.findById(id);
+      if (!admin) {
+          return res.status(404).json({ message: "Admin does not exist" });
+      }
+      res.status(200).json({ message: "success", admin });
+  } catch (err) {
+      res.status(500).json({ message: "internal server error", error: err });
+  }
+};
 
 //admin Login
 export const adminLogin = async (req, res) => {
@@ -90,7 +86,7 @@ export const addClassroomToAdmin = async (req, res) => {
     res.status(404).json({ message: "Admin does not exist" });
     return;
   }
-  let classroom = new Classroom(req.body);
+  let classroom = new Classroom({admin : admin._id, ...req.body});
   classroom
     .save()
     .then(() => {
@@ -298,3 +294,30 @@ export const deleteClassroomOfAdmin = async (req, res) => {
       res.send("Error Occurred !!!");
     });
 };
+
+//get admin's all classrooms attendance Report
+export const getAttendanceOfClassroomsOfAdmin = async(req, res) => {
+  let id = req.params.id;
+  let admin = await Admin.findById(id);
+
+  if (admin == null) {
+    res.status(404).json({ message: "Admin does not exist" });
+    return;
+  }
+  let attendance = [];
+  await Promise.all(admin.classrooms.map(async(classroomId) => {
+    let average = 0;
+    const classroom = await Classroom.findById(classroomId);
+    if(classroom) {
+      await Promise.all(classroom.students.map(async(studentId) => {
+          const student = await Student.findById(studentId);
+          const presentDays = student.presentDays.length;
+          const total = student.absentDays.length + presentDays;
+          average += presentDays / total;
+      }));
+      average = (average/classroom.students.length)*100;
+      attendance.push({name : classroom.name, value : !average ? 0 : average});
+    }
+  }))
+  res.status(200).json({message:"success", attendance});
+}

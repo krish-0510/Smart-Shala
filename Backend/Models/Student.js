@@ -56,6 +56,10 @@ let studentSchema = new mongoose.Schema({
         type : String,
         default:[]
     }],
+    face : {
+        type : Object,
+        default : null,
+    }
 });
 
 export const Student = mongoose.model("Student", studentSchema);

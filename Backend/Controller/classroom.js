@@ -252,3 +252,91 @@ export const getHomeworkOfClass = async(req, res) => {
     res.status(200).json({homeworks : classroom.homeworks});
 
 }
+
+// Get students of a particular classroom
+export const getStudentsOfClassroom = async (req, res) => {
+    const classroomId = req.params.id;
+
+    try {
+        const classroom = await Classroom.findById(classroomId).populate('students');
+        if (!classroom) {
+            return res.status(404).json({ message: "Classroom does not exist" });
+        }
+
+        const students = classroom.students;
+        res.status(200).json({ message: "success", students });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json({ message: "internal server error" });
+    }
+};
+
+// get average student attendance of a classroom
+export const getAverageStudentAttendanceOfClassroom = async(req, res) => {
+    const id = req.params.id;
+    const classroom = await Classroom.findById(id).populate('students');
+
+    if(!classroom) {
+        res.status(404).json({message : "Classroom does not exist"});
+        return;
+    }
+    let average = 0;
+    await Promise.all(classroom.students.map(async(student) => {
+        const presentDays = student.presentDays.length;
+        const total = student.absentDays.length + presentDays;
+        average += presentDays / total;
+    }));
+    average = (average/classroom.students.length)*100;
+    res.status(200).json({message:"success", average : !average ? 0 : average});
+}
+
+// Get top 3 performers of a classroom based on attendance
+export const getTopPerformersOfClassroom = async (req, res) => {
+    const id = req.params.id;
+    const classroom = await Classroom.findById(id).populate('students');
+
+    if (!classroom) {
+        return res.status(404).json({ message: "Classroom does not exist" });
+    }
+
+    const students = classroom.students.sort((a, b) => {
+        const aAttendance = (a.presentDays.length / (a.presentDays.length + a.absentDays.length)) || 0;
+        const bAttendance = (b.presentDays.length / (b.presentDays.length + b.absentDays.length)) || 0;
+        return bAttendance - aAttendance;
+    }).slice(0, 3);
+
+    res.status(200).json({ message: "success", topPerformers: students });
+};
+
+export const getSubmittedHomeworksOfClassroom = async (req, res) => {
+    const classroomId = req.params.id;
+    try {
+        const classroom = await Classroom.findById(classroomId).populate('homeworks');
+        if (!classroom) {
+            return res.status(404).json({ message: "Classroom does not exist" });
+        }
+
+        const submittedHomeworks = [];
+
+        for (const homework of classroom.homeworks) {
+            const students = await Student.find({ submittedHomeworks: homework._id });
+            const submissions = students.map(student => ({
+                studentId: student._id,
+                studentName: student.name,
+                homeworkId: homework._id,
+                homeworkTitle: homework.title,
+                homeworkDescription: homework.description,
+                homeworkDueDate: homework.dueDate
+            }));
+            submittedHomeworks.push({
+                homework,
+                submissions
+            });
+        }
+
+        res.status(200).json({ submittedHomeworks });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+};

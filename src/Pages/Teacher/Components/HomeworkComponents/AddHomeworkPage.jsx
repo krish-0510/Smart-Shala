@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import TeacherLeftSideNavBar from '../Components/TeacherLeftSideNavBar';
+import TeacherLeftSideNavBar from '../TeacherLeftSideNavBar';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { getStorage, ref,uploadBytes,getDownloadURL } from "firebase/storage";
-import { storage } from "../../../../firebase";
+import { storage } from "../../../../../firebase";
 
 const AddHomeworkPage = () => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -195,7 +195,7 @@ const AddHomeworkPage = () => {
           <div className="flex items-center justify-between">
             <button
               type="submit"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Assign Homework
             </button>

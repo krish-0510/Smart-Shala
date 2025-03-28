@@ -12,7 +12,7 @@ import { useAuth } from "../context/auth.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const SideNavbar = () => {
+const   SideNavbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [auth, setAuth] = useAuth();
@@ -43,6 +43,7 @@ const SideNavbar = () => {
     { icon: DataIcon, name: "Data Analytics", path: "/admin/data-analytics" },
     { icon: MeetingIcon, name: "Meeting", path: "/admin/meeting" },
     { icon: MeetingIcon, name: "Issues", path: "/admin/issues" },
+    { icon: DataIcon, name: "Resources", path: "/admin/resources" },
   ];
 
   return (

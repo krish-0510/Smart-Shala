@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TextField, Button, Box, List, ListItem, ListItemText, Typography, Container, Drawer, IconButton, Chip } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
-import SideNavbar from "../../../components/SideNavbar";
+import SideNavbar from "../../../../components/SideNavbar";
 import toast from "react-hot-toast";
 import axios from "axios";
 
