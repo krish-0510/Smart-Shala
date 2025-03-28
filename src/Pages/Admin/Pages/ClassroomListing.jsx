@@ -14,6 +14,7 @@ import Createclassroom from '../Components/Createclassroom';
 import TableListingstudent from '../Components/TableListingstudent';
 import TableListingteacher from '../Components/TableListingteacher';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
+import "../../../components/hover.css";
 
 const ClassroomListingpage = () => {
   const [classrooms, setClassrooms] = useState([]);
@@ -45,7 +46,9 @@ const ClassroomListingpage = () => {
           <div className="mb-6 flex justify-between items-center">
             <h1 className="text-2xl font-bold mb-2">Your Classrooms</h1>
            
-           <Createclassroom/>
+           <Button variant="contained" color="primary" type="submit" sx={{ marginTop: 2 }} onClick={() => navigate('/admin/create-classroom')}>
+            Create Classroom
+           </Button>
           </div>
 
           {classrooms && classrooms.length > 0 ? (
@@ -54,7 +57,7 @@ const ClassroomListingpage = () => {
               {classrooms.map((classroom) => {
                 return (
                   
-                  <Card className="relative mb-8 h-48" key={classroom.id} onClick={() => navigate(`/admin/classrooms/${classroom._id}`)}>
+                  <Card className="relative mb-8 h-48 hover-card" key={classroom._id} onClick={() => navigate(`/admin/classrooms/${classroom._id}`)}>
                    
                     <CardContent className="flex flex-col justify-center items-center h-full relative">
                       <Typography variant="h5" className="font-bold text-blue-600 text-center">

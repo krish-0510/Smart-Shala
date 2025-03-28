@@ -11,6 +11,9 @@ import {
   markAbsent,
   getStudentDataAnalytics,
   getPendingHomeworkOfStudent,
+  getSubmmitedHomeworkOfStudent,
+  submitHomeWorkOfStudent,
+  getPresentDaysAttendance,
 } from "./Controller/student.js";
 import {
   addTeacher,
@@ -46,6 +49,7 @@ import {
   deleteStudentOfAdmin,
   deleteTeacherOfAdmin,
   deleteClassroomOfAdmin,
+  getAdmin,
 } from "./Controller/admin.js";
 import {
   generateIssue,
@@ -100,10 +104,12 @@ app.get("/teacher/:id/students", getStudentsOfTeacher);
 
 // student routes
 app.get("/student/:id", getStudent);
-app.get("/student/:id/delete", deleteStudent);
+app.get("/student/:id/attendance", getPresentDaysAttendance);
 app.get("/student/:id/attendance/present", markPresent);
 app.get("/student/:id/attendance/absent", markAbsent);
 app.get("/student/:id/analytics", getStudentDataAnalytics);
+app.get("/student/:id/submitted-homeworks", getSubmmitedHomeworkOfStudent);
+app.get("/student/:sId/homework/:hId/submit", submitHomeWorkOfStudent);
 
 // issue generation routes
 app.get("/issue/:id/delete", deleteIssue);
@@ -112,6 +118,7 @@ app.get("/issue/:id/resolve", markIssueAsResolved);
 app.get("/issue/:id/refuse", markIssueAsNotResolved);
 
 // admin routes
+app.get("/admin/:id", getAdmin);
 app.get("/admin/:id/classrooms", getClassroomsOfAdmin);
 app.get("/admin/:id/students", getStudentsOfAdmin);
 app.get("/admin/:id/teachers", getTeachersOfAdmin);
@@ -124,7 +131,11 @@ app.post("/admin/:id/assign-student", addStudentToAdmin);
 app.post("/addAdmin", addAdmin);
 
 //homework routes
+<<<<<<< HEAD
 // app.get("/homework/analysis", analyzeImageFromFile);
+=======
+app.post("/homework/analysis", analyzeImageFromFile);
+>>>>>>> 95ad77757c885088e1090aeb791e9294e6845598
 app.get("/homework/:id", getHomework);
 
 // chat bot routes

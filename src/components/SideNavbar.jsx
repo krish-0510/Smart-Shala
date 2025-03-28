@@ -9,11 +9,23 @@ import {
 } from "../Pages/Admin/Icons/NavIcon.jsx";
 import { CircleCheckBig } from "lucide-react";
 import { useAuth } from "../context/auth.jsx";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 const SideNavbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [auth, setAuth] = useAuth();
+  const savedAuth = JSON.parse(localStorage.getItem("auth"));
+  const [admin, setAdmin] = useState(null);
+
+  useEffect(() => {
+    async function getAdmin() {
+      const res = await axios.get(`http://localhost:3000/admin/${savedAuth.id}`);
+      setAdmin(res.data.admin);
+    }
+    getAdmin();
+  },[]);
   const handleLogout = () => {
     setAuth({
       _id: null,
@@ -37,11 +49,11 @@ const SideNavbar = () => {
     <div className="w-64  bg-white shadow-lg p-4 space-y-4  ">
       <div className="flex items-center gap-2 p-2  ">
         <div className="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center">
-          <span className="text-white text-sm">A</span>
+          <span className="text-white text-sm">{admin && admin.email[0]}</span>
         </div>
         <div>
-          <p className="text-sm font-medium">Admin name</p>
-          <p className="text-xs text-gray-500">admin@example.com</p>
+          <p className="text-sm font-medium">Admin</p>
+          <p className="text-xs text-gray-500">{admin && admin.email}</p>
         </div>
       </div>
 

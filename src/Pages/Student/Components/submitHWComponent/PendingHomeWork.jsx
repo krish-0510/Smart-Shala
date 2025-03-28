@@ -55,6 +55,7 @@ const PendingHomeWork = () => {
         await uploadBytes(refoffile, uploadedFile);
         toast.dismiss(toastId);
         toast.success("Homework uploaded successfully!");
+        const res = await axios.get(`http://localhost:3000/student/${savedAuth.id}/homework/${id}/submit`);
         setUploadedFile(null);
       } catch (error) {
         console.error(error);

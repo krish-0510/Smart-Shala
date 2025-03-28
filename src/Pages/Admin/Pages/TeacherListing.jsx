@@ -1,9 +1,20 @@
-import { Card,CardContent } from "@mui/material"
 import SideNavbar from "../../../components/SideNavbar";
 import { useState,useEffect } from "react";
 import axios from "axios";
 import Teacherprofile from "../Components/Teacherprofile";
 import { SavedSearch } from "@mui/icons-material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  TextField,
+  Grid,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+} from "@mui/material";
+
 const TeacherListingpage = () => {
 
 
@@ -11,6 +22,8 @@ const TeacherListingpage = () => {
   
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState("name");
 
 
 // Thiss useEffect hookk willl try to preload the data from the server before rendering the screen.
@@ -28,6 +41,14 @@ const TeacherListingpage = () => {
 
   },[]);
 
+  const filteredTeachers = teachers
+    .filter((teacher) =>
+      teacher[sortOption].toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+        return a[sortOption].localeCompare(b[sortOption]);
+    });
+
   if (loading) {
     return <div className="text-center mt-8">Loading Teachers...</div>;
   }
@@ -42,24 +63,50 @@ const TeacherListingpage = () => {
    <SideNavbar/>
       <div className="flex-1 p-8">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Teacher</h1>
+          <h1 className="text-2xl font-bold">Teachers</h1>
         </div>
 
         {teachers && teachers.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {teachers?.map((teacher) => (
-            <Card key={teacher.id} className="bg-white rounded-lg shadow hover:shadow-lg transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex flex-col items-center">
-                  
-                  <h2 className="text-lg font-semibold mb-2">{teacher.name}</h2>
-                  <Teacherprofile Teachers={teacher} />
-                  
-                </div>
+        <>
+          {/* Search bar */}
+          <TextField
+          label="Search here"
+          variant="outlined"
+          fullWidth
+          margin="normal"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+
+        {/* Sorting dropdown */}
+        <FormControl fullWidth margin="normal">
+          <InputLabel id="sort-label">Sort By</InputLabel>
+          <Select
+            labelId="sort-label"
+            value={sortOption}
+            onChange={(e) => setSortOption(e.target.value)}
+          >
+            <MenuItem value="name">Name</MenuItem>
+            <MenuItem value="email">Email</MenuItem>
+          </Select>
+        </FormControl>
+
+        <Grid container spacing={3}>
+        {filteredTeachers.map((teacher) => (
+          <Grid item xs={12} sm={6} md={4} key={teacher._id}>
+            <Card elevation={3}>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  {teacher.name}
+                </Typography>
+                {teacher.email && <Typography color="textSecondary">Email: {teacher.email}</Typography>}
+                {teacher.contact && <Typography color="textSecondary">Contact: {teacher.contact}</Typography>}
               </CardContent>
             </Card>
-          ))}
-        </div>
+          </Grid>
+        ))}
+        </Grid>
+        </>
         ) : (
           <div className="text-center mt-8">No teacher found</div>
         )}

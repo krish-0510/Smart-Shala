@@ -1,130 +1,118 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, List,Chip,Box  } from '@mui/material';
-
-
-
+import React, { useState } from "react";
+import { TextField, Button, Box, List, ListItem, ListItemText, Typography, Container, Drawer, IconButton, Chip } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
+import SideNavbar from "../../../components/SideNavbar";
+import toast from "react-hot-toast";
+import axios from "axios";
 
 const Createclassroom = () => {
+  const [classroomName, setClassroomName] = useState("");
+  const [subjects, setSubjects] = useState([]);
+  const [equipments, setEquipments] = useState([]);
+  const [subjectInput, setSubjectInput] = useState("");
+  const [equipmentInput, setEquipmentInput] = useState("");
+  const savedAuth = JSON.parse(localStorage.getItem("auth"));
 
-    const [newClassroomName, setNewClassroomName] = useState('');
-    const [open, setOpen] = useState(false);
-    const [subjectopen, setSubjectOpen] = useState(false);
-    const [subject,setsubjects] = useState([]);
-    const [subjectadded,setsubjectadded] = useState("");
-    const savedAuth = JSON.parse(localStorage.getItem("auth"));
+  const handleAddSubject = () => {
+    if (subjectInput.trim() !== "") {
+      setSubjects([...subjects, subjectInput]);
+      setSubjectInput("");
+    }
+  };
 
-    const handleOpenDialog = () => {
-        setOpen(true);
-      };
-    
-      const handleCloseDialog = () => {
-        setOpen(false);
-        setsubjects([]);
-        setsubjectadded("");
-        
-      };
+  const handleAddEquipment = () => {
+    if (equipmentInput.trim() !== "") {
+      setEquipments([...equipments, equipmentInput]);
+      setEquipmentInput("");
+    }
+  };
 
-      const handleSubjectDialog = () => {
-        setSubjectOpen(true);
-      };
-    
-      const handleSubjectCloseDialog = () => {
-      setSubjectOpen(false);
-      };
 
-      const handleSubjectadd = () =>{
-        if(subjectadded){
-          setsubjects((prevSubjects) => [...prevSubjects, subjectadded]);
-          setsubjectadded("");
-          setSubjectOpen(false);
-         }
-        
-      }
-    
-      const handleCreateClassroom = async () => {
-        try {
-          const response = await axios.post(`http://localhost:3000/admin/${savedAuth.id}/assign-classroom`, {
-            name : newClassroomName,
-            subjects : subject
-          });
-          window.location.reload();
-          alert(response.data.message);
-        } catch (error) {
-          console.error('Error generating issue:', error);
-          alert('Failed to generate issue');
-        }
-      };
+  const handleSubmit = async(event) => {
+    event.preventDefault();
+
+    if(classroomName === "") {
+      toast.error("Classroom is required");
+      return;
+    }
+    try {
+      const response = await axios.post(`http://localhost:3000/admin/${savedAuth.id}/assign-classroom`, {
+        name : classroomName,
+        subjects,
+        equipments
+      });
+      toast.success("Classroom added successfully");
+    } catch (error) {
+      console.error('Error generating issue:', error);
+      toast.error(error.response.data.message);
+    }
+    // Add your form submission logic here
+  };
+
   return (
-    <>
+    <Box display="flex" className="flex min-h-screen bg-gray-100">
+      {/* Sidebar */}
+      <SideNavbar />
 
-<Button variant="contained" color="primary" onClick={handleOpenDialog}>
-              Create Classroom
-            </Button>
-
-<Dialog open={open} onClose={handleCloseDialog} maxWidth="lg" fullWidth>
-        <DialogTitle>Create Classroom</DialogTitle>
-        <DialogContent>
+      {/* Main content */}
+      <Container maxWidth="sm" sx={{ marginLeft: "250px", padding: 4 }}>
+        <Box component="form" className="form-container" sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <Typography variant="h4" gutterBottom>Create Classroom</Typography>
+          
+          {/* Classroom Name */}
           <TextField
-            autoFocus
-            margin="dense"
             label="Classroom Name"
-            type="text"
+            variant="outlined"
+            value={classroomName}
+            onChange={(e) => setClassroomName(e.target.value)}
             fullWidth
-            value={newClassroomName}
-            onChange={(e) => setNewClassroomName(e.target.value)}
+            required
           />
 
-<Button variant="contained" color="primary" onClick={handleSubjectDialog}>
-              Add subject
-            </Button>
-            <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+          {/* Subjects */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <TextField
+              label="Add Subject"
+              variant="outlined"
+              value={subjectInput}
+              onChange={(e) => setSubjectInput(e.target.value)}
+              fullWidth
+            />
+            <Button variant="contained" color="primary" onClick={handleAddSubject}>Add</Button>
+          </Box>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
               <h1>Subjects Added : </h1>
-            {subject.map((subject, index) => (
+            {subjects.map((subject, index) => (
               <Chip key={index} label={subject} />
             ))}
           </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleCreateClassroom} color="primary">
-            Create
-          </Button>
-        </DialogActions>
-      </Dialog>
 
-      <Dialog open={subjectopen} onClose={handleSubjectCloseDialog} maxWidth="sm" fullWidth>
-        <DialogTitle>Type your subject</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Subject Name"
-            type="text"
-            fullWidth
-            value={subjectadded}
-            onChange={(e) => setsubjectadded(e.target.value)}
-          />
+          {/* Equipments */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <TextField
+              label="Add Equipment"
+              variant="outlined"
+              value={equipmentInput}
+              onChange={(e) => setEquipmentInput(e.target.value)}
+              fullWidth
+            />
+            <Button variant="contained" color="primary" onClick={handleAddEquipment}>Add</Button>
+          </Box>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              <h1>Equipments Added : </h1>
+            {equipments.map((equipment, index) => (
+              <Chip key={index} label={equipment} />
+            ))}
+          </Box>
 
-
-          
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleSubjectCloseDialog} color="primary">
-            Cancel
+          {/* Submit Button */}
+          <Button variant="contained" color="primary" type="submit" sx={{ marginTop: 2 }} onClick={handleSubmit}>
+            Submit
           </Button>
-          <Button color="primary" onClick={handleSubjectadd}>
-            Add
-          </Button>
-        </DialogActions>
-      </Dialog>
-    
-    
-    
-    </>
-  )
-}
+        </Box>
+      </Container>
+    </Box>
+  );
+};
 
-export default Createclassroom
+export default Createclassroom;

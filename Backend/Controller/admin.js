@@ -25,8 +25,25 @@ export const addAdmin = async (req, res) => {
     });
 };
 
-//admin Login
+//get Admin
+export const getAdmin = async(req, res) => {
+  const id = req.params.id;
+    try {
+        const admin = await Admin.findById(id);
+        if(admin == null) {
+            res.status(400).json({message:"Admin does not exist"});
+        }
+        else {
+            res.status(201).json({message:"success", admin});
+        }
+    } catch (err) {
+        //handle error
+        console.log(err);
+        res.status(500).json({message:"internal server error"});
+    }
+}
 
+//admin Login
 export const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -73,11 +90,7 @@ export const addClassroomToAdmin = async (req, res) => {
     res.status(404).json({ message: "Admin does not exist" });
     return;
   }
-  let classroom = new Classroom({
-    name: req.body.name,
-    subjects: req.body.subjects,
-    endingDate: req.body.endingDate,
-  });
+  let classroom = new Classroom(req.body);
   classroom
     .save()
     .then(() => {

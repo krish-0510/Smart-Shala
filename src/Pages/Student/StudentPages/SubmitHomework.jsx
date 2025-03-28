@@ -1,8 +1,5 @@
 import React, { useState } from "react";
 import LeftSideNavbar from "../Components/LeftSideNavBar";
-import SubmitHWmainBox from "../Components/submitHWComponent/SubmitHWmainBox";
-import RightSideBarHW from "../Components/submitHWComponent/RightSideBarHW";
-import PendingHomeWork from "../Components/submitHWComponent/PendingHomeWork";
 import PendingList from "../Components/submitHWComponent/PendingList";
 
 const SubmitHomework = () => {
@@ -32,10 +29,7 @@ const SubmitHomework = () => {
         <div className="gap-5 mr-50"> 
         <PendingList/>
         </div> 
-      </div> 
-      <RightSideBarHW
-       submittedHomework={submittedHomework}  
-      />  
+      </div>
       
       
     </div>

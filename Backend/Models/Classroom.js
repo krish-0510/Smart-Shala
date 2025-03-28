@@ -26,6 +26,10 @@ let classRoomSchema = new mongoose.Schema({
         ref: 'Homework',
         default:[]
     }],
+    equipments : {
+        type: [String],
+        default : []
+    },
     subjects : {
         type : [String],
         default : []

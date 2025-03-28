@@ -20,11 +20,11 @@ const AdminHome = () => {
           </div>
         </div>
         <div className="h-screen " id="middle-container">
-          <div id="upper-nav" className="">
+          {/* <div id="upper-nav" className="">
             <div id="upperNav" className="flex w-3/4 h-auto">
               <UpperNavbar />
             </div>
-          </div>
+          </div> */}
           <div id="main-container" className="bg-green-500">
             <div
               id="middle-left "
